@@ -1,6 +1,4 @@
 import unittest
-from mayanCalendar import convert
-import unittest
 
 from mayanCalendar import convert
 
