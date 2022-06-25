@@ -3,7 +3,7 @@ including the 52-year cycle Calendar Round as well as the and the 5215-year
 cycle long count from an epoch date of August 11, 3114 BCE.
 
 Based on formulae from the [Smithsonian National Museum of the American Indian
-exhibits on the Maya](https://maya.nmai.si.edu/).
+exhibits on the Maya](https://maya.nmai.si.edu/) which also has a nice [interactive converter](https://maya.nmai.si.edu/calendar/maya-calendar-converter)
 
 # Usage
 Convert a Gregorian date to a Mayan long count, and string describing the  
@@ -23,3 +23,9 @@ Haab, the Tzolk’in components of the calendar round.
 >>> d
 6 B’en 6 Sek G8
 ```
+
+
+## Image Credits
+All glyphs are in the public domain or Creative Commons licensed and available on English Wikipedia pages on the [Mayan calendar](https://commons.wikimedia.org/wiki/Maya_calendar) and [Haabʼ](https://en.wikipedia.org/wiki/Haab%CA%BC) pages.
+* Tzolkin and Lord of the Night glyphs are provided by Wikipedia Commons contribtors Piquito Veloz and CJLL Wright respectively under the Creative Commons Attribution-Share Alike 3.0 Unported license. 
+* Haab' month glyphs are in the public domain, from the 1905 book *An Introduction to the Study of the Maya Hieroglyphs* by Sylvanus Griswold Morley
