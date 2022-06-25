@@ -1,8 +1,7 @@
 import math
 
 
-
-def toLCD(jdn):
+def to_long_count(jdn):
     # based on algorithm developed by Smithsonian National Museum of the American Indian
     longCount = [None, None, None, None, None]
     days = round(jdn - 584282.5)  # epoch of August 11, 3114 BCE.
@@ -33,15 +32,16 @@ def to_tzolkin_date(jdn):
     month = ((longCount + 19) % 20)
     return day, tzolkin_months[month]
 
+
 def to_haad_date(jdn):
     haad_months = ['Pop', 'Wo’', 'Sip', 'Sotz’', 'Sek', 'Xul', 'Yaxk’in', 'Mol', 'Ch’en', 'Yax', 'Sak’', 'Keh', 'Mak',
                    'K’ank’in', 'Muwan', 'Pax', 'K’ayab', 'Kumk’u', 'Wayeb’']  # haab'
     longCount = round(jdn - 584282.5)
-    dayOfHaab = (longCount -17) % 365
-    day =round(dayOfHaab % 20);
-    month =round(math.floor(dayOfHaab/20))
+    dayOfHaab = (longCount - 17) % 365
+    day = round(dayOfHaab % 20);
+    month = round(math.floor(dayOfHaab / 20))
     return day, haad_months[month]
 
-def to_lord_number(x, y):
-	return ( ( 20 * x + y + 8 ) % 9 + 1)
 
+def to_lord_number(x, y):
+    return ((20 * x + y + 8) % 9 + 1)
