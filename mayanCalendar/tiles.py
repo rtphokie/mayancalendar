@@ -62,7 +62,8 @@ class block(object):
         for n in range(bar_cnt):
             x = (column_width * (n + first_bar_column)) + gutter_width
             y = gutter_width
-            draw.rounded_rectangle((x, y, x + pip_size[0], glyph_height),
+            draw.rounded_rectangle((x, y,
+                                    x + pip_size[0], glyph_height-(gutter_width*2)),
                                    fill=None, outline="#000", width=2, radius=7)
 
     def draw_pips(self, cnt, glyph_height, stroke, color='#000'):
