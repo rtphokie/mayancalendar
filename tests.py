@@ -1,6 +1,28 @@
 import unittest
 
 from mayanCalendar import convert
+from mayanCalendar.tiles import block, tile
+
+
+class TestImages(unittest.TestCase):
+
+    def test_capstone(self):
+        uut = block(size=2, name=f"capstone")
+        uut.overlay('long_count_capstone')
+
+    def test_block_generation(self):
+        import os
+        for name in ['baktun', 'katun', 'kin', 'tun']:
+            for x in range(0, 20):
+                filename = f"{name}_{x:02}"
+                uut = block(size=1, name=f"{name}_{x:02}")
+                uut.overlay(name, cnt=x)
+                del (uut)  # triggers file to write to cache
+                bytes = os.path.getsize(f"cache/{filename}.png")
+                if x == 0:
+                    self.assertGreaterEqual(bytes, 30000)
+                else:
+                    self.assertGreaterEqual(bytes, 20000)
 
 
 class TestMayaDates(unittest.TestCase):
@@ -12,6 +34,8 @@ class TestMayaDates(unittest.TestCase):
         # Lord of the Night: G8
         self.assertEqual([13, 0, 9, 11, 13], lc)
         self.assertEqual("6 B’en 6 Sek G8", d)
+        imgs = [tile('baktun', lc[0])]
+        del (imgs[0])
 
     # Test with glyphs on stella at the Quirigua site
     def test_Quirigua_stella_d(self):
