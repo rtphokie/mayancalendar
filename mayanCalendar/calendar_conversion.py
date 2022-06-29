@@ -25,22 +25,22 @@ def to_long_count(jdn):
 
 
 def to_tzolkin_date(jdn):
-    tzolkin_months = ['Imix’', 'Ik’', 'Ak’bal', 'K’an', 'Chikchan', 'Kimi', 'Manik’', 'Lamat', 'Muluk', 'Ok', 'Chuwen',
-                      'Eb', 'B’en', 'Hix', 'Men', 'K’ib’', 'Kaban', 'Etz’nab’', 'Kawak', 'Ajaw']  # tzolk'in
+    tzolkin_names = ['Imix’', 'Ik’', 'Ak’bal', 'K’an', 'Chikchan', 'Kimi', 'Manik’', 'Lamat', 'Muluk', 'Ok', 'Chuwen',
+                    'Eb', 'B’en', 'Hix', 'Men', 'K’ib’', 'Kaban', 'Etz’nab’', 'Kawak', 'Ajaw']  # tzolk'in
     longCount = round(jdn - 584282.5);
-    day = (((longCount + 3) % 13) + 1)
-    month = ((longCount + 19) % 20)
-    return day, tzolkin_months[month]
+    cnt = (((longCount + 3) % 13) + 1)
+    day = ((longCount + 19) % 20)
+    return cnt, day, tzolkin_names[day]
 
 
 def to_haad_date(jdn):
-    haad_months = ['Pop', 'Wo’', 'Sip', 'Sotz’', 'Sek', 'Xul', 'Yaxk’in', 'Mol', 'Ch’en', 'Yax', 'Sak’', 'Keh', 'Mak',
+    haad_names = ['Pop', 'Wo’', 'Sip', 'Sotz’', 'Sek', 'Xul', 'Yaxk’in', 'Mol', 'Ch’en', 'Yax', 'Sak’', 'Keh', 'Mak',
                    'K’ank’in', 'Muwan', 'Pax', 'K’ayab', 'Kumk’u', 'Wayeb’']  # haab'
     longCount = round(jdn - 584282.5)
     dayOfHaab = (longCount - 17) % 365
-    day = round(dayOfHaab % 20);
+    day = round(dayOfHaab % 20)
     month = round(math.floor(dayOfHaab / 20))
-    return day, haad_months[month]
+    return day, month, haad_names[month]
 
 
 def to_lord_number(x, y):

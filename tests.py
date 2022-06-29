@@ -1,7 +1,7 @@
 import unittest
 
 from mayanCalendar import convert
-from mayanCalendar.tiles import block, tile
+from mayanCalendar.tiles import block, tile, stella
 
 
 class TestImages(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestImages(unittest.TestCase):
 
     def test_block_generation(self):
         import os
-        for name in ['baktun', 'katun', 'kin', 'tun']:
+        for name in ['baktun', 'katun', 'tun', 'kin']:
             for x in range(0, 20):
                 filename = f"{name}_{x:02}"
                 uut = block(size=1, name=f"{name}_{x:02}")
@@ -66,6 +66,37 @@ class TestMayaDates(unittest.TestCase):
         # Lord of the Night: G9
         self.assertEqual([9, 16, 0, 0, 0], lc)
         self.assertEqual("2 Ajaw 13 Sek G9", d)
+
+    def test_Quirigua_stella_d_img(self):
+        lc, d = convert(805, 7, 18)
+        # 9.18.15.0.0
+        # Tzolk'in Date: 3 Ajaw
+        # Haab Date: 3 Yax
+        # Lord of the Night: G9
+        self.assertEqual([9, 18, 15, 0, 0], lc)
+        self.assertEqual("3 Ajaw 3 Yax G9", d)
+        stella(lc)
+
+    def test_long_count_modern_img(self):
+        lc, thl, d = convert(2022, 6, 28)
+        # 13.0.9.11.13
+        # Tzolk'in Date: 6 B'en
+        # Haab Date: 6 Sek
+        # Lord of the Night: G8
+        self.assertEqual([13, 0, 9, 11, 16], lc)
+        self.assertEqual([9, 16, 9, 4, 2], thl)
+        self.assertEqual("9 K’ib’ 9 Sek G2", d)
+        print(lc)
+        for n, name in enumerate(['baktun', 'katun']):
+            print(f"{n} {name}")
+            print(f"{lc[n-1]} {name}", end=' ')
+        stella(lc, thl)
+
+    def test_more(self):
+        lc, thl, d = convert(2022, 6, 25)
+        stella(lc, thl)
+
+
 
 
 if __name__ == '__main__':

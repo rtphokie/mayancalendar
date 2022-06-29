@@ -1,7 +1,7 @@
 import math
 import os
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageEnhance
 
 
 class block(object):
@@ -27,6 +27,9 @@ class block(object):
 
     def overlay(self, glyphname, cnt=None):
         overlay = Image.open(f"glyphs/{glyphname}.png").convert("RGBA")
+        overlay = self.make_transparant(overlay)
+        overlay = self.crop_to_image(overlay)
+
         overlay = overlay.resize((self.width - 7, self.height - 7))
         glyph_width, glyph_height = overlay.size
         glyph_long_side = max([glyph_height, glyph_width])
@@ -50,6 +53,23 @@ class block(object):
             self.draw_pips(cnt, glyph_long_side, stroke)
             self.draw_bars(cnt, glyph_long_side, stroke)
 
+    def crop_to_image(self, overlay):
+        imageBox = overlay.getbbox()
+        overlay = overlay.crop(imageBox)
+        return overlay
+
+    def make_transparant(self, overlay):
+        newimage = overlay.copy()
+        datas = overlay.getdata()
+        newData = []
+        for item in datas:
+            if item[0] == 255 and item[1] == 255 and item[2] == 255:
+                newData.append((255, 255, 255, 0))
+            else:
+                newData.append(item)
+        newimage.putdata(newData)
+        return newimage
+
     def draw_bars(self, cnt, glyph_height, stroke):
         pip_cnt, bar_cnt, _ = self.tally_layout(cnt)
         pip_size, gutter_width, column_width = self.tally_sizing(glyph_height, stroke=stroke)
@@ -63,13 +83,12 @@ class block(object):
             x = (column_width * (n + first_bar_column)) + gutter_width
             y = gutter_width
             draw.rounded_rectangle((x, y,
-                                    x + pip_size[0], glyph_height-(gutter_width*2)),
+                                    x + pip_size[0], glyph_height - (gutter_width * 2)),
                                    fill=None, outline="#000", width=2, radius=7)
 
     def draw_pips(self, cnt, glyph_height, stroke, color='#000'):
         # draw first column of circles representing remainder of cnt divided by 5
         pip_cnt, _, _ = self.tally_layout(cnt)
-        print(f"{cnt} {pip_cnt} {'-' * 20}")
         if 0 < pip_cnt < 5:
             pip_size, gutter, column_width = self.tally_sizing(glyph_height, stroke=stroke)
             draw = ImageDraw.Draw(self.img)
@@ -86,7 +105,7 @@ class block(object):
                 elif pip_cnt == 2:
                     offset += math.floor((glyph_height / 3) - (pip_height / 2))
                 elif pip_cnt == 3:
-                    offset += math.floor(pip_height/4)
+                    offset += math.floor(pip_height / 4)
 
             start = offset
             end = self.height - offset
@@ -128,3 +147,55 @@ def tile(name, cnt):
     uut = block(size=1, name=f'{cnt:02d}_{name}')
     uut.overlay(name, cnt=cnt)
     return (uut.img)
+
+
+def stella(longcount, thl):
+    rows = 5
+    block_gutter = 2
+    stella = block(size=2, name='stella')
+    stella.img = stella.img.resize((stella.width + (block_gutter * 4), stella.height * rows))
+    stella.width, stella.height = stella.img.size
+    enhancer = ImageEnhance.Brightness(stella.img)
+    stella.img = enhancer.enhance(.5)
+
+    col_first = block_gutter
+    col_second = math.floor(stella.width / 2) + block_gutter
+
+    blockheight = round(stella.height / rows) + 1
+    capstone = block(size=2, name=f"capstone")
+    capstone.overlay('long_count_capstone')
+    stella.img.paste(capstone.img, (col_first, 0), mask=capstone.img)
+
+    baktun = block(size=1, name=f"baktun_{longcount[0]:02}")
+    baktun.overlay('baktun', cnt=longcount[0])
+    stella.img.paste(baktun.img, (col_first, blockheight + block_gutter), mask=baktun.img)
+
+    katun = block(size=1, name=f"katun_{longcount[1]:02}")
+    katun.overlay('katun', cnt=longcount[1])
+    stella.img.paste(katun.img, (col_second, blockheight + block_gutter), mask=katun.img)
+
+    tun = block(size=1, name=f"tun_{longcount[2]:02}")
+    tun.overlay('tun', cnt=longcount[2])
+    stella.img.paste(tun.img, (col_first, 2 * blockheight + block_gutter), mask=tun.img)
+
+    uinal = block(size=1, name=f"uinal_{longcount[3]:02}")
+    uinal.overlay('uinal', cnt=longcount[3])
+    stella.img.paste(uinal.img, (col_second, 2 * blockheight + block_gutter), mask=uinal.img)
+
+    kin = block(size=1, name=f"kin_{longcount[4]:02}")
+    kin.overlay('kin', cnt=longcount[4])
+    stella.img.paste(kin.img, (col_first, 3 * blockheight + block_gutter), mask=kin.img)
+
+    tzolkn = block(size=1, name=f"tzolkn{thl[0]:02}")
+    tzolkn.overlay(f'tzolkin_D{thl[1]:02d}', cnt=thl[0])
+    stella.img.paste(tzolkn.img, (col_second, 3 * blockheight + block_gutter), mask=tzolkn.img)
+
+    haab = block(size=1, name=f"haab{thl[2]:02}")
+    haab.overlay(f'haab_{thl[3]:02d}', cnt=thl[2])
+    stella.img.paste(haab.img, (col_first, 4 * blockheight + block_gutter), mask=haab.img)
+
+    lord = block(size=1, name=f"haab{thl[2]:02}")
+    lord.overlay(f'G{thl[4]:1d}_lord_of_the_night', cnt=None)
+    stella.img.paste(lord.img, (col_second, 4 * blockheight + block_gutter), mask=lord.img)
+
+    del (stella)
