@@ -1,3 +1,5 @@
+As seen on the [@MayaCalToday](https://twitter.com/MayaCalToday) Twitter account.
+
 Converts dates in the Gregorian calendar dates in the Mayan calendar including the 52-year cycle Calendar Round as well
 as the and the 5215-year cycle long count from an epoch date of August 11, 3114 BCE.
 
