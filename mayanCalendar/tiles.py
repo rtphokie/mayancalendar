@@ -1,8 +1,9 @@
 import math
+import datetime
 import os
 
 from PIL import Image, ImageDraw, ImageEnhance
-
+from mayanCalendar.calendar_conversion import convert
 
 class block(object):
 
@@ -18,7 +19,7 @@ class block(object):
         if size < 1:
             block = block.resize((self.width * size, self.height))
         if size > 2:
-            block = block.resize((self.width * (size / 2), self.height))
+            block = block.resize((self.width * round(size * 2), self.height))
         self.block = block
         self.img = block.copy()
         self.name = name
@@ -27,8 +28,8 @@ class block(object):
 
     def overlay(self, glyphname, cnt=None):
         overlay = Image.open(f"glyphs/{glyphname}.png").convert("RGBA")
-        overlay = self.make_transparant(overlay)
-        overlay = self.crop_to_image(overlay)
+        overlay = make_transparant(overlay)
+        overlay = crop_to_image(overlay)
 
         overlay = overlay.resize((self.width - 7, self.height - 7))
         glyph_width, glyph_height = overlay.size
@@ -52,23 +53,6 @@ class block(object):
         else:
             self.draw_pips(cnt, glyph_long_side, stroke)
             self.draw_bars(cnt, glyph_long_side, stroke)
-
-    def crop_to_image(self, overlay):
-        imageBox = overlay.getbbox()
-        overlay = overlay.crop(imageBox)
-        return overlay
-
-    def make_transparant(self, overlay):
-        newimage = overlay.copy()
-        datas = overlay.getdata()
-        newData = []
-        for item in datas:
-            if item[0] == 255 and item[1] == 255 and item[2] == 255:
-                newData.append((255, 255, 255, 0))
-            else:
-                newData.append(item)
-        newimage.putdata(newData)
-        return newimage
 
     def draw_bars(self, cnt, glyph_height, stroke):
         pip_cnt, bar_cnt, _ = self.tally_layout(cnt)
@@ -198,4 +182,38 @@ def stella(longcount, thl):
     lord.overlay(f'G{thl[4]:1d}_lord_of_the_night', cnt=None)
     stella.img.paste(lord.img, (col_second, 4 * blockheight + block_gutter), mask=lord.img)
 
-    del (stella)
+
+def crop_to_image(img):
+    imageBox = img.getbbox()
+    img = img.crop(imageBox)
+    return img
+
+
+def make_transparant(img):
+    # removes white pixels
+    newimage = img.copy()
+    datas = img.getdata()
+    newData = []
+    for item in datas:
+        if item[0] == 255 and item[1] == 255 and item[2] == 255:
+            newData.append((255, 255, 255, 0))
+        else:
+            newData.append(item)
+    newimage.putdata(newData)
+    return newimage
+
+
+def todays_image(date=None):
+    if date is None:
+        date = datetime.date.today()
+        lc, thl, d = convert(date.year, date.month, date.day)
+        stella(lc, thl)
+        s = f"{lc[0]} baktun"
+        s += f" {lc[1]} katun"
+        s += f" {lc[2]} tun"
+        s += f" {lc[3]} uinal"
+        s += f" {lc[4]} k'in"
+        s += f", {d}"
+        print(s)
+
+

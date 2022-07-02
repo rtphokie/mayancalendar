@@ -1,7 +1,7 @@
 import unittest
 
 from mayanCalendar import convert
-from mayanCalendar.tiles import block, tile, stella
+from mayanCalendar.tiles import block, tile, stella, todays_image
 
 
 class TestImages(unittest.TestCase):
@@ -27,7 +27,7 @@ class TestImages(unittest.TestCase):
 
 class TestMayaDates(unittest.TestCase):
     def test_long_count_modern(self):
-        lc, d = convert(2022, 6, 25)
+        lc, thl, d = convert(2022, 7, 2)
         # 13.0.9.11.13
         # Tzolk'in Date: 6 B'en
         # Haab Date: 6 Sek
@@ -39,7 +39,7 @@ class TestMayaDates(unittest.TestCase):
 
     # Test with glyphs on stella at the Quirigua site
     def test_Quirigua_stella_d(self):
-        lc, d = convert(805, 7, 18)
+        lc, thl, d = convert(805, 7, 18)
         # 9.18.15.0.0
         # Tzolk'in Date: 3 Ajaw
         # Haab Date: 3 Yax
@@ -49,7 +49,7 @@ class TestMayaDates(unittest.TestCase):
 
     def test_Quirigua_stella_e(self):
         # Jan 18, 771
-        lc, d = convert(771, 1, 18)
+        lc, thl, d = convert(771, 1, 18)
         # 9.17.0.0.0
         # Tzolk'in Date: 13 Ajaw
         # Haab Date: 18 kumk'u
@@ -59,7 +59,7 @@ class TestMayaDates(unittest.TestCase):
 
     def test_Quirigua_stella_h(self):
         # May 3, 751
-        lc, d = convert(751, 5, 3)
+        lc, thl, d = convert(751, 5, 3)
         # 9.16.0.0.0
         # Tzolk'in Date: 2 Ajaw
         # Haab Date: 13 Sek
@@ -68,33 +68,32 @@ class TestMayaDates(unittest.TestCase):
         self.assertEqual("2 Ajaw 13 Sek G9", d)
 
     def test_Quirigua_stella_d_img(self):
-        lc, d = convert(805, 7, 18)
+        lc, thl, d = convert(805, 7, 18)
         # 9.18.15.0.0
         # Tzolk'in Date: 3 Ajaw
         # Haab Date: 3 Yax
         # Lord of the Night: G9
         self.assertEqual([9, 18, 15, 0, 0], lc)
         self.assertEqual("3 Ajaw 3 Yax G9", d)
-        stella(lc)
+        stella(lc, thl)
 
     def test_long_count_modern_img(self):
-        lc, thl, d = convert(2022, 6, 28)
+        lc, thl, d = convert(2022, 6, 29)
+        stella(lc, thl)
         # 13.0.9.11.13
         # Tzolk'in Date: 6 B'en
         # Haab Date: 6 Sek
         # Lord of the Night: G8
-        self.assertEqual([13, 0, 9, 11, 16], lc)
-        self.assertEqual([9, 16, 9, 4, 2], thl)
-        self.assertEqual("9 K’ib’ 9 Sek G2", d)
-        print(lc)
-        for n, name in enumerate(['baktun', 'katun']):
-            print(f"{n} {name}")
-            print(f"{lc[n-1]} {name}", end=' ')
-        stella(lc, thl)
+        self.assertEqual([13, 0, 9, 11, 17], lc)
+        self.assertEqual("10 Kaban 10 Sek G3", d)
+        # self.assertEqual([9, 16, 9, 4, 2], thl)
+        # print(lc)
+        # for n, name in enumerate(['baktun', 'katun']):
+        #     print(f"{n} {name}")
+        #     print(f"{lc[n-1]} {name}", end=' ')
 
     def test_more(self):
-        lc, thl, d = convert(2022, 6, 25)
-        stella(lc, thl)
+        todays_image()
 
 
 

@@ -1,4 +1,5 @@
 import math
+from mayanCalendar.utils import dt_to_jd
 
 
 def to_long_count(jdn):
@@ -45,3 +46,12 @@ def to_haad_date(jdn):
 
 def to_lord_number(x, y):
     return ((20 * x + y + 8) % 9 + 1)
+
+
+def convert(y, m, d):
+    jd = dt_to_jd(y, m, d)
+    lc = to_long_count(jd)
+    td_num, td_day, td_name = to_tzolkin_date(jd)
+    hd_num, hd_day, hd_name = to_haad_date(jd)
+    lord_num = to_lord_number(lc[3], lc[4])
+    return lc, [td_num, td_day+1, hd_num, hd_day, lord_num], f"{td_num} {td_name} {hd_num} {hd_name} G{lord_num}"

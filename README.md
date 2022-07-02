@@ -30,7 +30,7 @@ Haab, the Tzolk’in components of the calendar round.
 All glyphs are in the public domain or Creative Commons licensed and available on English Wikipedia pages on
 the [Mayan calendar](https://commons.wikimedia.org/wiki/Maya_calendar)
 , [Haabʼ](https://en.wikipedia.org/wiki/Haab%CA%BC)
-, [Mesoamerican Long Count calendar](https://en.wikipedia.org/wiki/Mesoamerican_Long_Count_calendar)pages.
+, [Mesoamerican Long Count calendar](https://en.wikipedia.org/wiki/Mesoamerican_Long_Count_calendar) pages.
 
 * Tzolkin and Lord of the Night glyphs are provided by Wikipedia Commons contributoris Piquito Veloz and CJLL Wright
   respectively under the Creative Commons Attribution-Share Alike 3.0 license.
